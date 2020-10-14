@@ -24,19 +24,25 @@ y = [ 0 if (t['grade'] == 'A')  else 1 if (t['grade'] == 'B') else 2 for t in da
 # y = [ 1 if (t['grade'] == 'B') else -1 for t in data ]                  # binary 
 X = np.array(X)
 y = np.array(y)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.33 , random_state=42)
 
 ## 고정 ## 
 
 
 
 ## Random Forests## 
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.33 , random_state=42)
+
+############
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 classifier = RandomForestClassifier(n_estimators = 10, criterion = 'entropy', random_state = 42).fit(X_train, y_train)  # n_estimatiors : tree 개수 
 y_predict = classifier.predict(X_test)
+cnf_matrix = confusion_matrix(y_test, y_predict)
+#################
+
 
 
 #Reverse factorize (converting y_pred from 0s,1s and 2s to Iris-setosa, Iris-versicolor and Iris-virginica
@@ -48,13 +54,7 @@ y_pred = np.vectorize(reversefactor.get)(y_predict)
 print(pd.crosstab(y_test, y_predict, rownames=['Actual Species'], colnames=['Predicted Species']))
 
 '''
-
-
-
-
 # Build the confusion matrix of our 3-class classification problem
-cnf_matrix = confusion_matrix(y_test, y_predict)
-
 
 FP = cnf_matrix.sum(axis=0) - np.diag(cnf_matrix) 
 FN = cnf_matrix.sum(axis=1) - np.diag(cnf_matrix)

@@ -12,7 +12,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression     # Logistical Regression 
 
 
-####################3
+####################
 def start():
     conn = pymysql.connect(host = 'localhost', user = 'Soo', password = '1234' , db = 'data_science')
     curs = conn.cursor(pymysql.cursors.DictCursor)
@@ -30,8 +30,8 @@ def start():
     X = np.array(X)
     y = np.array(y)
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.33 , random_state=42)
-    return X_train, X_test, y_train, y_test 
+    
+    return X, y
     ################### 고정 #############
 
 def calcurator_tts(y_test, y_predict): 
@@ -53,6 +53,10 @@ def calcurator_tts(y_test, y_predict):
     print('recall =  ' ,recall)
     print('F1_score = ', f1_score, '\n')
 
+def tts (X_train, X_test, y_train, y_test):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.33 , random_state=42)
+    return X_train, X_test, y_train, y_test
+
 def calcurator_kfold(X, y,a):
     F1_score , Recall, Precision, Accuracy = [], [], [], []
     mean_acc ,mean_prec , mean_rec, mean_f1 = [0,0,0],[0,0,0],[0,0,0],[0,0,0]
@@ -64,7 +68,7 @@ def calcurator_kfold(X, y,a):
         X_train , X_test = X[train_index], X[test_index]
         y_train , y_test = y[train_index], y[test_index]
 
-        select_model(a)
+        select_model(a, X_train, X_test,y_train, y_test)
         
 
 
@@ -88,11 +92,8 @@ def calcurator_kfold(X, y,a):
     print('f1_score_평균 = ',mean_f1,'\n')
     print( ' < K-fold cross validation by_',name)
 
-    
 
-
-
- def select_model(a):
+def select_model(a,X_train, X_test,y_train, y_test ):
     if a == 'svm' :
         SVM_MUlti_Class(X_train, X_test,y_train, y_test )
 
@@ -113,25 +114,14 @@ def SVM_MUlti_Class(X_train, X_test,y_train, y_test ):                      #이
     return cnf_matrix, name
 
 
-def Random_Forest_Multi_Class(X_train, X_test,y_train, y_test ): 
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
-
-    classifier = RandomForestClassifier(n_estimators = 10, criterion = 'entropy', random_state = 42).fit(X_train, y_train)  # n_estimatiors : tree 개수 
-    y_predict = classifier.predict(X_test)
-
+def Random_Forest_Multi_Class(X_train, X_test,y_train, y_test): 
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
     classifier = RandomForestClassifier(n_estimators = 10, criterion = 'entropy', random_state = 42).fit(X_train, y_train)  # n_estimatiors : tree 개수 
     y_predict = classifier.predict(X_test)
     cnf_matrix = confusion_matrix(y_test, y_predict)
-
-
-    calcurator_tts(y_test, y_predict)
-    
-    
+    # calcurator_tts(y_test, y_predict)
     
     name = 'Random_Forest_Multi-Class'
     
