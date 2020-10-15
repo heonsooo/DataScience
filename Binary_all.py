@@ -3,6 +3,8 @@ import numpy as np
 from sklearn.model_selection import KFold   
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
+import statistics 
+
 
 from sklearn import svm                                 # SVM 
 
@@ -143,10 +145,10 @@ def tts (X,y,a):
 
 
 
-'''
+
 def kfold(X, y,a):
-    F1_score , Recall, Precision, Accuracy = [], [], [], []
-    mean_acc ,mean_prec , mean_rec, mean_f1 = [0,0,0],[0,0,0],[0,0,0],[0,0,0]
+    accuracy, precision, recall, f1_score= [], [], [], []
+    
     k= int(4)
     kf = KFold(n_splits =k, random_state = 42, shuffle = True)
 
@@ -155,10 +157,7 @@ def kfold(X, y,a):
         X_train , X_test = X[train_index], X[test_index]
         y_train , y_test = y[train_index], y[test_index]
 
-        if a == 'svm' :
-            y_test, y_predict, name = SVM_Binary(X_train, X_test,y_train, y_test )
-
-        elif a == 'Rf' :
+        if a == 'Rf' :
             y_test, y_predict, name = Random_Forest_Binary(X_train, X_test,y_train, y_test)
 
         elif a =='Lr':
@@ -168,36 +167,24 @@ def kfold(X, y,a):
             print('알고리즘을 확인해주세요.')
 
         acc, prec, rec, f1 = classification_performance_eval(y_test, y_predict)
-
-        print( ' < train_test_splitby_',name,'> \n')
-        print('accuracy =%.4f' %acc)
-        print('precision = %.4f' %prec)
-        print('recall = %.4f ' %rec)
-        print('F1_score = %.4f' %f1, '\n')
+        accuracy.append(acc)
+        precision.append(prec)
+        recall.append(rec)
+        f1_score.append(f1)
 
 
 
-
-
-    for i in range(0, k):
-        for j in range(0,3):
-            mean_acc[j] += float(Accuracy[i][j])
-            mean_prec[j] += float(Precision[i][j])
-            mean_rec[j] += float(Recall[i][j])
-            mean_f1[j] += float(F1_score[i][j])
-
-    for j in range(0,3):
-        mean_acc[j] = round(mean_acc[j]/k,4)
-        mean_prec[j] = round(mean_prec[j]/k,4)
-        mean_rec[j] =round(mean_rec[j]/k,4)
-        mean_f1[j] = round(mean_f1[j]/k,4)
-        
     print( ' < K-fold cross validation by_',name,'> \n')
-    print('accuracy_평균 = ', mean_acc)
-    print('precision_평균 = ', mean_prec )
-    print('recall_평균 = ', mean_rec)
-    print('f1_score_평균 = ',mean_f1,'\n')
-'''  
+    print('accuracy_평균 = ', round(statistics.mean(accuracy),4))
+    print('precision_평균 = ', round(statistics.mean(precision),4))
+    print('recall_평균 = ', round(statistics.mean(recall),4))
+    print('f1_score_평균 = ', round(statistics.mean(f1_score),4),'\n')
+
+
+
+
+
+
 
 conn = pymysql.connect(host = 'localhost', user = 'Soo', password = '1234' , db = 'data_science')
 curs = conn.cursor(pymysql.cursors.DictCursor)
@@ -218,11 +205,10 @@ y = np.array(y)
 
 
 
-tts(X,y, 'svm')
-tts(X,y, 'Rf')
-tts(X,y, 'Lr')
+# tts(X,y, 'svm')
+# tts(X,y, 'Rf')
+# tts(X,y, 'Lr')
 
 # kfold(X,y, 'svm')
-# kfold(X,y, 'Rf')
-# kfold(X,y, 'Lr')
-    
+kfold(X,y, 'Rf')
+kfold(X,y, 'Lr')

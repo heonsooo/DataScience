@@ -87,7 +87,7 @@ for train_index, test_index in kf.split(X):
     X_train , X_test = X[train_index], X[test_index]
     Y_train , Y_test = Y[train_index], Y[test_index]
     
-
+##########################
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
@@ -95,7 +95,7 @@ for train_index, test_index in kf.split(X):
     classifier = RandomForestClassifier(n_estimators = 10, criterion = 'entropy', random_state = 42)
     classifier.fit(X_train, Y_train)  # n_estimatiors : tree 개수 
     y_predict = classifier.predict(X_test)
-    
+###########################
 
     acc, prec, rec, f1 = classification_performance_eval(Y_test, y_predict)
     accuracy.append(acc)

@@ -68,7 +68,7 @@ precision = []
 recall = []
 f1_score = []
 
-kf = KFold(n_splits = 3, random_state =42, shuffle = True)
+kf = KFold(n_splits = 4, random_state =42, shuffle = True)
 
 for train_index, test_index in kf.split(X):
 
@@ -77,11 +77,11 @@ for train_index, test_index in kf.split(X):
     x_train , x_test = X[train_index], X[test_index]
     y_train , y_test = Y[train_index], Y[test_index]
     
-
-    Lr_k_fold = LogisticRegression(C=1, random_state=0)
+##########
+    Lr_k_fold = LogisticRegression(C=1, random_state=0,solver= 'liblinear')
     Lr_k_fold.fit(x_train, y_train)
     y_predict = Lr_k_fold.predict(x_test)
-    
+########
 
     acc, prec, rec, f1 = classification_performance_eval(y_test, y_predict)
     accuracy.append(acc)
