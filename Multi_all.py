@@ -106,13 +106,46 @@ def calcurator(cnf_matrix,Accuracy, Precision, Recall, F1_score ):
 
     return Accuracy, Precision, Recall, F1_score
 
+def calcurator_tts(cnf_matrix): 
+
+    FP = cnf_matrix.sum(axis=0) - np.diag(cnf_matrix) 
+    FN = cnf_matrix.sum(axis=1) - np.diag(cnf_matrix)
+    TP = np.diag(cnf_matrix)
+    TN = cnf_matrix.sum() - (FP + FN + TP)
+    FP, FN, TP, TN =  FP.astype(float), FN.astype(float) , TP.astype(float), TN.astype(float)
+   
+    ACC = (TP+TN)/(TP+FP+FN+TN)
+    prec =TP/(TP+FP)
+    recall = TP/(TP+FN)
+    f1_score = 2*prec*recall / (prec + recall)
+
+    return ACC, prec, recall, f1_score
+
 
 def tts (X,y,a):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.33 , random_state=42)
 
-    select_model(a, X_train, X_test, y_train, y_test)
-    # calcurator(cnf_matrix)
-    return X_train, X_test, y_train, y_test
+    if a == 'svm' :
+        cnf_matrix , name = SVM_MUlti_Class(X_train, X_test,y_train, y_test )
+
+    elif a == 'Rf' :
+        cnf_matrix , name =Random_Forest_Multi_Class(X_train, X_test,y_train, y_test)
+
+
+    elif a =='Lr':
+        cnf_matrix , name = Logistic_Regression_Multi_Class(X_train, X_test,y_train, y_test)
+
+    else: 
+        print('알고리즘을 확인해주세요.')
+
+    ACC, prec, recall ,f1_score = calcurator_tts(cnf_matrix)
+
+    print( ' < train_test_splitby_',name,'> \n')
+    print('accuracy =', ACC)
+    print('precision = ' ,prec)
+    print('recall =  ' ,recall)
+    print('F1_score = ', f1_score, '\n')
+
 
 def kfold(X, y,a):
     F1_score , Recall, Precision, Accuracy = [], [], [], []
@@ -164,13 +197,6 @@ def kfold(X, y,a):
     print('f1_score_평균 = ',mean_f1,'\n')
     
 
-
-
-
-
-
-####################
-
 conn = pymysql.connect(host = 'localhost', user = 'Soo', password = '1234' , db = 'data_science')
 curs = conn.cursor(pymysql.cursors.DictCursor)
 sql = 'select*from db_score'
@@ -187,8 +213,12 @@ y = [ 0 if (t['grade'] == 'A')  else 1 if (t['grade'] == 'B') else 2 for t in da
 X = np.array(X)
 y = np.array(y)
 
-################### 고정 #############
 
+
+
+tts(X,y, 'svm')
+tts(X,y, 'Rf')
+tts(X,y, 'Lr')
 
 kfold(X,y, 'svm')
 kfold(X,y, 'Rf')

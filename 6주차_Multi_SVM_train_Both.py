@@ -20,7 +20,7 @@ y = [ 0 if (t['grade'] == 'A')  else 1 if (t['grade'] == 'B') else 2 for t in da
 y = np.array(y)
 X = np.array(X)
 
-
+########
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.33 , random_state=42)
 classifier = svm.SVC(kernel='linear').fit(X_train, y_train)
 
@@ -29,7 +29,7 @@ classifier = svm.SVC(kernel='linear').fit(X_train, y_train)
 predicted_labels = classifier.predict(X_test)
 # Build the confusion matrix of our 3-class classification problem
 cnf_matrix = confusion_matrix(y_test, predicted_labels)
-
+#########
 
 FP = cnf_matrix.sum(axis=0) - np.diag(cnf_matrix) 
 FN = cnf_matrix.sum(axis=1) - np.diag(cnf_matrix)

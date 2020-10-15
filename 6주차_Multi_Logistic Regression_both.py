@@ -21,7 +21,7 @@ X = np.array(X)
 y = np.array(y)
 ## 고정 ## 
 
-Lr = LogisticRegression(C=1, random_state=0)
+Lr = LogisticRegression(C=1, random_state=0,solver= 'liblinear')
 Lr.fit(X_train, y_train)
 predict = Lr.predict(X_test)
 
