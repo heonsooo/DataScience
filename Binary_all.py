@@ -15,8 +15,6 @@ from sklearn.linear_model import LogisticRegression     # Logistical Regression
 
 def classification_performance_eval(y, y_predict):
     tp, tn, fp, fn = 0,0,0,0
-    
-
     for y, yp in zip(y,y_predict):
         if y == 1 and yp ==1 :
             tp += 1 
@@ -26,8 +24,7 @@ def classification_performance_eval(y, y_predict):
             fp += 1 
         elif y == -1 and yp == -1 :
             tn += 1 
-    
-    # print(tp, tn, fp, fn)
+    #tp+=1 if y==1 and yp ==1 else fn+=1 if y == 1 and yp == -1 else fp += 1 if y == -1 and yp == 1 else tn += 1 if y == -1 and yp == -1 for y, yp in zip(y,y_predict)
 
     try :
         accuracy = (tp+ tn)/(tp+tn+fp+fn)
@@ -152,39 +149,58 @@ def kfold(X, y,a):
     k= int(4)
     kf = KFold(n_splits =k, random_state = 42, shuffle = True)
 
+    if a == 'svm':
+        kernel_list = ['rbf', 'linear','sigmoid','poly']
+        for a in kernel_list:
+            for train_index, test_index in kf.split(X):
 
-    for train_index, test_index in kf.split(X):
-        X_train , X_test = X[train_index], X[test_index]
-        y_train , y_test = y[train_index], y[test_index]
+                
+                X_train , X_test = X[train_index], X[test_index]
+                y_train , y_test = y[train_index], y[test_index]
+                
+                clf = svm.SVC(kernel= a , gamma='auto', C= 1)
+                clf_model = clf.fit(X_train,y_train)
+                y_predict = clf_model.predict(X_test)
 
-        if a == 'Rf' :
-            y_test, y_predict, name = Random_Forest_Binary(X_train, X_test,y_train, y_test)
-
-        elif a =='Lr':
-            y_test, y_predict, name = Logistic_Regression_Binary(X_train, X_test,y_train, y_test)
-
-        else: 
-            print('알고리즘을 확인해주세요.')
-
-        acc, prec, rec, f1 = classification_performance_eval(y_test, y_predict)
-        accuracy.append(acc)
-        precision.append(prec)
-        recall.append(rec)
-        f1_score.append(f1)
-
-
-
-    print( ' < K-fold cross validation by_',name,'> \n')
-    print('accuracy_평균 = ', round(statistics.mean(accuracy),4))
-    print('precision_평균 = ', round(statistics.mean(precision),4))
-    print('recall_평균 = ', round(statistics.mean(recall),4))
-    print('f1_score_평균 = ', round(statistics.mean(f1_score),4),'\n')
+                
+                acc, prec, rec, f1 = classification_performance_eval(y_test, y_predict)
+                accuracy.append(acc)
+                precision.append(prec)
+                recall.append(rec)
+                f1_score.append(f1)
+            print( ' < K-fold cross validation by_SVM-Binary >  kernel = ' , a)
+            print('accuracy_평균 = ', round(statistics.mean(accuracy),4))
+            print('precision_평균 = ', round(statistics.mean(precision),4))
+            print('recall_평균 = ', round(statistics.mean(recall),4))
+            print('f1_score_평균 = ', round(statistics.mean(f1_score),4),'\n')
 
 
 
 
+    else: 
+        for train_index, test_index in kf.split(X):
+            X_train , X_test = X[train_index], X[test_index]
+            y_train , y_test = y[train_index], y[test_index]
 
+            if a == 'Rf' :
+                y_test, y_predict, name = Random_Forest_Binary(X_train, X_test,y_train, y_test)
 
+            elif a =='Lr':
+                y_test, y_predict, name = Logistic_Regression_Binary(X_train, X_test,y_train, y_test)
+
+            else: 
+                print('알고리즘을 확인해주세요.')
+
+            acc, prec, rec, f1 = classification_performance_eval(y_test, y_predict)
+            accuracy.append(acc)
+            precision.append(prec)
+            recall.append(rec)
+            f1_score.append(f1)
+        print( ' < K-fold cross validation by_',name,'> \n')
+        print('accuracy_평균 = ', round(statistics.mean(accuracy),4))
+        print('precision_평균 = ', round(statistics.mean(precision),4))
+        print('recall_평균 = ', round(statistics.mean(recall),4))
+        print('f1_score_평균 = ', round(statistics.mean(f1_score),4),'\n')
 
 conn = pymysql.connect(host = 'localhost', user = 'Soo', password = '1234' , db = 'data_science')
 curs = conn.cursor(pymysql.cursors.DictCursor)
@@ -205,10 +221,10 @@ y = np.array(y)
 
 
 
-# tts(X,y, 'svm')
-# tts(X,y, 'Rf')
-# tts(X,y, 'Lr')
+tts(X,y, 'svm')
+tts(X,y, 'Rf')
+tts(X,y, 'Lr')
 
-# kfold(X,y, 'svm')
+kfold(X,y, 'svm')
 kfold(X,y, 'Rf')
 kfold(X,y, 'Lr')

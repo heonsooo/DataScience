@@ -72,7 +72,7 @@ recall = []
 f1_score = []
 
 
-kf = KFold(n_splits = 3, random_state = 42, shuffle = True)
+kf = KFold(n_splits = 4, random_state = 42, shuffle = True)
 for a in kernel_list:
     for train_index, test_index in kf.split(X):
 
