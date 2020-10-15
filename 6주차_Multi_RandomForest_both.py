@@ -84,7 +84,6 @@ print('F1_score = ', f1_score, '\n')
 
 
 
-
 from sklearn.model_selection import KFold
 
 Accuracy = []
