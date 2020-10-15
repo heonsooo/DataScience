@@ -47,9 +47,9 @@ Y = np.array(Y)
 
 # from sklearn.model_selection import train_test_split
 X_train , X_test , Y_train, Y_test = train_test_split(X, Y, test_size = 0.333 , random_state = 42)                #test 사이즈(비율)을 통해 train : test = 0.66 : 0.33 (2:1 비율)로 설정
-b = ['rbf', 'linear','sigmoid','poly']
-b1 = ['rbf']
-for a in b :
+kernel_list = ['rbf', 'linear','sigmoid','poly']
+
+for a in kernel_list :
     clf = svm.SVC(kernel= a , gamma='auto', C= 1)
     clf.fit(X_train,Y_train)
     predict = clf.predict(X_test)
@@ -73,11 +73,10 @@ f1_score = []
 
 
 kf = KFold(n_splits = 3, random_state = 42, shuffle = True)
-for a in b :
+for a in kernel_list:
     for train_index, test_index in kf.split(X):
 
-        print(train_index , '\n', test_index)
-
+        
         X_train , X_test = X[train_index], X[test_index]
         Y_train , Y_test = Y[train_index], Y[test_index]
         

@@ -47,7 +47,7 @@ conn.close()
 
 X = [ ( t['homework'], t['discussion'], t['midterm'] )  for t in data ]
 Y = [ 1 if (t['grade'] == 'B')  else -1 for t in data ]
-X_train , X_test , Y_train, Y_test = train_test_split(X, Y, test_size = 0.333 , random_state = 42) 
+X_train , X_test , Y_train, Y_test = train_test_split(X, Y, test_size = 0.33 , random_state = 42) 
 
 Lr = LogisticRegression(C=1)
 Lr.fit(X_train, Y_train)

@@ -12,29 +12,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression     # Logistical Regression 
 
 
-
-'''
-def calcurator_tts(y_test, y_predict): 
-    cnf_matrix = confusion_matrix(y_test, y_predict)
-
-
-    FP = cnf_matrix.sum(axis=0) - np.diag(cnf_matrix) 
-    FN = cnf_matrix.sum(axis=1) - np.diag(cnf_matrix)
-    TP = np.diag(cnf_matrix)
-    TN = cnf_matrix.sum() - (FP + FN + TP)
-    FP, FN, TP, TN =  FP.astype(float), FN.astype(float) , TP.astype(float), TN.astype(float)
-   
-    ACC = (TP+TN)/(TP+FP+FN+TN)
-    prec =TP/(TP+FP)
-    recall = TP/(TP+FN)
-    f1_score = 2*prec*recall / (prec + recall)
-    print('accuracy =', ACC)
-    print('precision = ' ,prec)
-    print('recall =  ' ,recall)
-    print('F1_score = ', f1_score, '\n')
-'''
-
-def SVM_MUlti_Class(X_train, X_test,y_train, y_test ):                      #이거만 완성
+def SVM_MUlti_Class(X_train, X_test,y_train, y_test ):                      
     classifier = svm.SVC(kernel='linear').fit(X_train, y_train)
     y_predict = classifier.predict(X_test)
     cnf_matrix = confusion_matrix(y_test, y_predict)
@@ -50,10 +28,8 @@ def Random_Forest_Multi_Class(X_train, X_test,y_train, y_test):
     classifier = RandomForestClassifier(n_estimators = 10, criterion = 'entropy', random_state = 42).fit(X_train, y_train)  # n_estimatiors : tree 개수 
     y_predict = classifier.predict(X_test)
     cnf_matrix = confusion_matrix(y_test, y_predict)
-    # calcurator_tts(y_test, y_predict)
     
     name = 'Random_Forest_Multi-Class'
-    # calcurator(cnf_matrix,Accuracy, Precision, Recall, F1_score)
     return cnf_matrix, name
 
 
@@ -62,27 +38,7 @@ def Logistic_Regression_Multi_Class(X_train, X_test,y_train, y_test):
     y_predict = Lr.predict(X_test)
     cnf_matrix = confusion_matrix(y_test, y_predict)
     name = 'Logistic Regression_Multi-Class'
-    # calcurator(cnf_matrix,Accuracy, Precision, Recall, F1_score)
     return cnf_matrix, name
-
-
-
-# def select_model(a,X_train, X_test,y_train, y_test ):
-#     if a == 'svm' :
-#         cnf_matrix , name = SVM_MUlti_Class(X_train, X_test,y_train, y_test )
-#         # calcurator(cnf_matrix,Accuracy, Precision, Recall, F1_score)
-
-#     elif a == 'rF' :
-#         cnf_matrix = Random_Forest_Multi_Class(X_train, X_test,y_train, y_test)
-
-#     elif a =='LR':
-#         cnf_matrix = Logistic_Regression_Multi_Class(X_train, X_test,y_train, y_test)
-
-#     else: 
-#         print('알고리즘을 확인해주세요.')
-
-#     Accuracy, Precision, Recall, F1_score = calcurator(cnf_matrix,Accuracy, Precision, Recall, F1_score)
-#     return name, Accuracy, Precision, Recall, F1_score
 
 
 
