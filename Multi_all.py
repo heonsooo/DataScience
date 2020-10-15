@@ -66,19 +66,23 @@ def Logistic_Regression_Multi_Class(X_train, X_test,y_train, y_test):
     return cnf_matrix, name
 
 
-'''
-def select_model(a,X_train, X_test,y_train, y_test ):
-    if a == 'svm' :
-        SVM_MUlti_Class(X_train, X_test,y_train, y_test )
 
-    elif a == 'rF' :
-        Random_Forest_Multi_Class(X_train, X_test,y_train, y_test)
+# def select_model(a,X_train, X_test,y_train, y_test ):
+#     if a == 'svm' :
+#         cnf_matrix , name = SVM_MUlti_Class(X_train, X_test,y_train, y_test )
+#         # calcurator(cnf_matrix,Accuracy, Precision, Recall, F1_score)
 
-    elif a =='LR':
-        Logistic_Regression_Multi_Class(X_train, X_test,y_train, y_test)
-'''
+#     elif a == 'rF' :
+#         cnf_matrix = Random_Forest_Multi_Class(X_train, X_test,y_train, y_test)
 
+#     elif a =='LR':
+#         cnf_matrix = Logistic_Regression_Multi_Class(X_train, X_test,y_train, y_test)
 
+#     else: 
+#         print('알고리즘을 확인해주세요.')
+
+#     Accuracy, Precision, Recall, F1_score = calcurator(cnf_matrix,Accuracy, Precision, Recall, F1_score)
+#     return name, Accuracy, Precision, Recall, F1_score
 
 
 
@@ -121,36 +125,21 @@ def kfold(X, y,a):
         X_train , X_test = X[train_index], X[test_index]
         y_train , y_test = y[train_index], y[test_index]
 
-        # select_model(a, X_train, X_test,y_train, y_test)
         if a == 'svm' :
             cnf_matrix , name = SVM_MUlti_Class(X_train, X_test,y_train, y_test )
             calcurator(cnf_matrix,Accuracy, Precision, Recall, F1_score)
 
-        elif a == 'rF' :
-            cnf_matrix = Random_Forest_Multi_Class(X_train, X_test,y_train, y_test)
+        elif a == 'Rf' :
+            cnf_matrix , name =Random_Forest_Multi_Class(X_train, X_test,y_train, y_test)
+            calcurator(cnf_matrix,Accuracy, Precision, Recall, F1_score)
 
-        elif a =='LR':
-            cnf_matrix = Logistic_Regression_Multi_Class(X_train, X_test,y_train, y_test)
+        elif a =='Lr':
+            cnf_matrix , name = Logistic_Regression_Multi_Class(X_train, X_test,y_train, y_test)
+            calcurator(cnf_matrix,Accuracy, Precision, Recall, F1_score)
 
         else: 
             print('알고리즘을 확인해주세요.')
-        
-        # FP = cnf_matrix.sum(axis=0) - np.diag(cnf_matrix) 
-        # FN = cnf_matrix.sum(axis=1) - np.diag(cnf_matrix)
-        # TP = np.diag(cnf_matrix)
-        # TN = cnf_matrix.sum() - (FP + FN + TP)
-        # FP, FN, TP, TN =  FP.astype(float), FN.astype(float) , TP.astype(float), TN.astype(float)
-    
-        # ACC = (TP+TN)/(TP+FP+FN+TN)
-        # prec =TP/(TP+FP)
-        # recall = TP/(TP+FN)
-        # f1_score = 2*prec*recall / (prec + recall)
 
-        # Accuracy.append(ACC)
-        # Precision.append(prec)
-        # Recall.append(recall)
-        # F1_score.append(f1_score)
-        
 
 
 
@@ -167,12 +156,13 @@ def kfold(X, y,a):
         mean_prec[j] = round(mean_prec[j]/k,4)
         mean_rec[j] =round(mean_rec[j]/k,4)
         mean_f1[j] = round(mean_f1[j]/k,4)
-
+        
+    print( ' < K-fold cross validation by_',name,'> \n')
     print('accuracy_평균 = ', mean_acc)
     print('precision_평균 = ', mean_prec )
     print('recall_평균 = ', mean_rec)
     print('f1_score_평균 = ',mean_f1,'\n')
-    print( ' < K-fold cross validation by_',name,'\n')
+    
 
 
 
@@ -201,3 +191,5 @@ y = np.array(y)
 
 
 kfold(X,y, 'svm')
+kfold(X,y, 'Rf')
+kfold(X,y, 'Lr')
