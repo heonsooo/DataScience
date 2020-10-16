@@ -14,6 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression     # Logistical Regression 
 
 def classification_performance_eval(y, y_predict):
+    accuracy, precision, recall, f1_score = 0,0,0,0
     tp, tn, fp, fn = 0,0,0,0
     for y, yp in zip(y,y_predict):
         if y == 1 and yp ==1 :
@@ -33,8 +34,10 @@ def classification_performance_eval(y, y_predict):
         f1_score = 2*precision*recall / (precision + recall)
         
     except:
-        if tp == 0: 
-            precision, recall, f1_score = 0 ,0 ,0 
+        #if tp == 0: 
+        #   precision, recall, f1_score = 0 ,0 ,0 \
+        print('실패!!')
+    
     
     return accuracy, precision, recall, f1_score
 
@@ -113,7 +116,7 @@ def calcurator_tts(cnf_matrix):
 
 
 def tts (X,y,a):
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.33 , random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.33 , shuffle = True,random_state=42)
     
     if a == 'svm' :
         SVM_Binary(X_train, X_test,y_train, y_test)
