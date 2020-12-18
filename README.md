@@ -7,7 +7,6 @@
 - incompletion 폴더는 제출 전 미완성 파일입니다.
 - 감사합니다.
 
-var routes = (
   <Route name="Deep_Learning">
     <Route name="CNN_Image_Predict(food, Interior, Exterior)"/>
     <Route name="CNN_MINST"/>
@@ -16,6 +15,3 @@ var routes = (
   
    <Route name="Completion"/>
    <Route name="Incompletion"/>
- 
-  
-);
