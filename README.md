@@ -7,10 +7,13 @@ DataScience
 ├───Deep_Learning
 │   │
 │   ├───CNN_Image_Predict(food, Interior, Exterior)
-│   └───CNN_MINST 
-│
+│   │   :CNN을 이용한 45000장 이미지 예측 프로젝트
+│   │
+│   └───CNN_MNIST
+│       :CNN을 이용한 MNIST 예측
+│   
 ├───Completion
-│   ┖완성
+│   ┖완성(이진 및 다중 분류모델, 통계 및 시각화, 경사하강법, tf-idf, 코사인 유사도, NN을 이용한 비선형회귀 예측 )
 │
 └───Endeavors
     ┖시행착오한 노력
