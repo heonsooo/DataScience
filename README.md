@@ -5,6 +5,8 @@ DataScience
 │   README.md
 │    
 ├───Deep_Learning
+│   │   :신경망 이용한 선형, 비선형 예측
+│   │
 │   │
 │   ├───CNN_Image_Predict(food, Interior, Exterior)
 │   │   :CNN을 이용한 45000장 이미지 예측 프로젝트
